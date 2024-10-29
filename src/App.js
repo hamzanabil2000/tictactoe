@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import './App.css'; 
+import { useState } from "react";
+import "./App.css";
 
 function Square({ value, onSquareClick, highlight }) {
   return (
-    <button className={`square ${highlight ? 'highlight' : ''}`} onClick={onSquareClick}>
+    <button
+      className={`square ${highlight ? "highlight" : ""}`}
+      onClick={onSquareClick}
+    >
       {value}
     </button>
   );
@@ -15,26 +18,26 @@ function Board({ xIsNext, squares, onPlay }) {
       return;
     }
     const nextSquares = squares.slice();
-    nextSquares[i] = xIsNext ? 'X' : 'O';
+    nextSquares[i] = xIsNext ? "X" : "O";
     onPlay(nextSquares);
   }
 
   const { winner, winningSquares } = calculateWinner(squares);
   let status;
   if (winner) {
-    status = 'Winner: ' + winner;
+    status = "Winner: " + winner;
   } else if (!squares.includes(null)) {
-    status = 'Draw';
+    status = "Draw";
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+    status = "Next player: " + (xIsNext ? "X" : "O");
   }
 
   return (
     <>
       <div className="status">{status}</div>
-      {[0, 1, 2].map(row => (
+      {[0, 1, 2].map((row) => (
         <div className="board-row" key={row}>
-          {[0, 1, 2].map(col => {
+          {[0, 1, 2].map((col) => {
             const index = row * 3 + col;
             return (
               <Square
@@ -52,7 +55,9 @@ function Board({ xIsNext, squares, onPlay }) {
 }
 
 export default function Game() {
-  const [history, setHistory] = useState([{ squares: Array(9).fill(null), location: null }]);
+  const [history, setHistory] = useState([
+    { squares: Array(9).fill(null), location: null },
+  ]);
   const [currentMove, setCurrentMove] = useState(0);
   const [isAscending, setIsAscending] = useState(true);
   const xIsNext = currentMove % 2 === 0;
@@ -62,7 +67,7 @@ export default function Game() {
     const newLocation = calculateLocation(currentMove);
     const nextHistory = [
       ...history.slice(0, currentMove + 1),
-      { squares: nextSquares, location: newLocation }
+      { squares: nextSquares, location: newLocation },
     ];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);
@@ -79,10 +84,10 @@ export default function Game() {
   const sortedMoves = [...history.keys()];
   if (!isAscending) sortedMoves.reverse();
 
-  const moves = sortedMoves.map(move => {
+  const moves = sortedMoves.map((move) => {
     const description = move
       ? `Go to move #${move} (${history[move].location.row}, ${history[move].location.col})`
-      : 'Go to game start';
+      : "Go to game start";
     return (
       <li key={move}>
         {move === currentMove ? (
@@ -101,7 +106,7 @@ export default function Game() {
       </div>
       <div className="game-info">
         <button onClick={toggleSort}>
-          Sort Moves {isAscending ? 'Descending' : 'Ascending'}
+          Sort Moves {isAscending ? "Descending" : "Ascending"}
         </button>
         <ol>{moves}</ol>
       </div>
